@@ -1,0 +1,22 @@
+{
+    "name": "mist-webit/yii2-bootstrap-material-design",
+    "description": "Yii2 asset for Material design theme for Bootstrap 3 http://fezvrasta.github.io/bootstrap-material-design/",
+    "type": "yii2-extension",
+    "keywords":["yii2","extension","theme","material"],
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Mika Ståhlberg",
+            "email":"mika.stahlberg@interaktiva.fi"
+        }
+    ],
+    "require":{
+        "yiisoft/yii2": "*",
+        "bower-asset/bootstrap-material-design": "*"
+    },
+    "autoload":{
+        "psr-4":{
+            "mistwebit\\materialbootstrap\\": ""
+        }
+    }
+}
