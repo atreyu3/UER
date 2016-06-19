@@ -168,9 +168,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 				if ($value == 'tbl_user_password') {
 					$iteracion[] = ['column' => $value, 'csv' => $key, 'relacion' => false, 'filter' => '', 'flag' => ''];
 				} else {
+					if($value=='tbl_user_email')
+					$iteracion[] = ['column' => $value, 'csv' => $key, 'relacion' => false, 'filter' => FILTER_SANITIZE_EMAIL, 'flag' => ''];
+					else
 					$iteracion[] = ['column' => $value, 'csv' => $key, 'relacion' => false, 'filter' => FILTER_SANITIZE_STRING, 'flag' => ''];
 				}
 			}
+			
 		}
 		$column = ['db' => $db, 'iteracion' => $iteracion];
 		$archivo -> proccessglobal($csv, $page = 0, null);
@@ -338,7 +342,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 	 */
 	public function getTblUserList() {
 		$id_categoria=\app\models\Categoriauser::find()->where(['tbl_categoriauser_nombre'=>'Jefe de mecanico'])->one();
-		return ArrayHelper::map($this -> find() -> where(['tbl_categoriauser_id_categoriauser' => $id_categoria->id_categoriauser]) -> all(), 'id_user', 'tbl_user_nombre');
+		return isset($id_categoria) ? ArrayHelper::map($this -> find() -> where(['tbl_categoriauser_id_categoriauser' => $id_categoria->id_categoriauser]) -> all(), 'id_user', 'tbl_user_nombre') :'';
 	}
 
 }

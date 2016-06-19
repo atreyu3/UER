@@ -18,7 +18,7 @@ class Modelcustomfunction
 		if(is_numeric($string) or $filter===FILTER_SANITIZE_NUMBER_INT){
 			$str=filter_var($string,$filter,$filterflag);
 		}
-		if($filter===FILTER_SANITIZE_STRING ){
+		if($filter===FILTER_SANITIZE_STRING or $filter===FILTER_SANITIZE_EMAIL){
 		$str=filter_var($string,$filter,$filterflag);	
 		//$str=str_replace('.', ' ', $str);
 		//$str=ucfirst(mb_strtolower(trim($str)));

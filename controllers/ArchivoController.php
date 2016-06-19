@@ -158,6 +158,39 @@ class ArchivoController extends Controller
 			}
     	}
     }
+	/*
+	 * upload file post massive 
+	 * 
+	 * @return error
+	 * */
+	public function actionSubirtemplateuser()
+    {
+    	$model = new Archivo();
+    	if(Yii::$app->request->isPost){
+    		if ($model->imageFiles = UploadedFile::getInstances($model, 'imageFiles')){
+    			$model->tbl_archivo_nombre=end($model->imageFiles);
+				$model->tbl_archivo_user=1;
+				if($model->upload() and  $model->save(false)){
+					$user=new \app\models\User();
+					$array_aux=[
+					'modelcsv'=>[
+								'tbl_user_numeroempleado'=>0,
+								'tbl_user_nombre'=>1,
+								'tbl_user_apellidomaterno'=>2,
+								'tbl_user_apellidopaterno'=>3,
+								'tbl_user_email'=>4,
+								'tbl_user_password'=>5,
+								'tbl_user_siglas'=>6,
+								'tbl_categoriauser_id_categoriauser'=>7
+							],
+					'id'=>$model->id_archivo,
+					];
+				 		//return	print_r($user->cargacsv($array_aux));
+					return $this->redirect(['user/index']);					
+				}
+			}
+    	}
+    }
     /**
      * Displays a single Archivo model.
      * @param integer $id

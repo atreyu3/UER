@@ -18,17 +18,7 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
-        	'access'=>[
-        	'class'=>AccessControl::className(),
-        	'only'=>['index','create','view','update'],
-        	'rules'=>[
-        			['actions'=>['index','view','create','update'],
-        				'allow'=>true,
-        				'roles'=>['@'],
-        				'matchCallback'=>function($rule,$action){ if(Yii::$app->User->identity->tblCategoriauserIdCategoriauser->tbl_categoriauser_nombre=="Administrador" or Yii::$app->User->identity->tblCategoriauserIdCategoriauser->tbl_categoriauser_nombre=="Almacenista" ) return true; else return false;},
-        			]
-        		]
-        	],
+        	
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
