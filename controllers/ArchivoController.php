@@ -174,18 +174,18 @@ class ArchivoController extends Controller
 					$user=new \app\models\User();
 					$array_aux=[
 					'modelcsv'=>[
-								'tbl_user_numeroempleado'=>0,
+								'tbl_user_numeroempleado'=>'0',
 								'tbl_user_nombre'=>1,
 								'tbl_user_apellidomaterno'=>2,
 								'tbl_user_apellidopaterno'=>3,
-								'tbl_user_email'=>4,
-								'tbl_user_password'=>5,
+								'tbl_user_email'=>8,
+								'tbl_user_password'=>'0',
 								'tbl_user_siglas'=>6,
 								'tbl_categoriauser_id_categoriauser'=>7
 							],
 					'id'=>$model->id_archivo,
 					];
-				 		//return	print_r($user->cargacsv($array_aux));
+				 		$user->cargacsv($array_aux);
 					return $this->redirect(['user/index']);					
 				}
 			}
