@@ -188,4 +188,17 @@ class MaquinaController extends Controller
 			
 		}
     }
+	
+	public function actionMaquinainactivas(){
+		$searchModel = new MaquinaSearch();
+        $dataProvider = $searchModel->searchIniactivos(Yii::$app->request->queryParams);
+		$model=new Maquina();
+        return $this->render('inactivo', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model'=>$model,
+        ]);
+		
+	}
+
 }
