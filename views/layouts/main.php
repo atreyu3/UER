@@ -34,9 +34,11 @@ $menuItems2 = [
         ['label' => 'Maquina',
          'template'=>'<a href="{url}" >{label}</a>',
 		 'items' => [
-		 	  ['label' => 'Consulta maquina', 'url' => ['maquina/index']],	
+		 	  ['label' => 'Consulta maquina ', 'url' => ['maquina/index']],	
+			  ['label' => 'Maquina inactivas', 'url' => ['maquina/maquinainactivas']],
 		 	  ['label' => 'Consulta de Lineas', 'url' => ['linea/index']], 
 		 	  ['label' => 'Centro de costos', 'url' => ['centrodecostos/index']],
+			  
 		 ]        
         ],
         ['label' => 'Impresion',
