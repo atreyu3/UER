@@ -64,7 +64,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 	 * @inheritdoc
 	 */
 	public function attributeLabelslist() {
-		return ['tbl_user_numeroempleado' => Yii::t('app', 'Numero Empleado'),'tbl_user_nombre' => Yii::t('app', 'Tbl User Nombre'), 'tbl_user_apellidomaterno' => Yii::t('app', 'Tbl User Apellidomaterno'), 'tbl_user_apellidopaterno' => Yii::t('app', 'Tbl User Apellidopaterno'),'tbl_user_email'=>Yii::t('app','Tbl User Email'), 'tbl_user_password' => Yii::t('app', 'Tbl User Password'), 'tbl_user_siglas' => Yii::t('app', 'Tbl User Siglas'), 'tbl_categoriauser_id_categoriauser' => Yii::t('app', 'Tbl Categoriauser Id Categoriauser')];
+		return ['tbl_user_numeroempleado' => Yii::t('app', 'Numero Empleado'),'tbl_user_nombre' => Yii::t('app', 'Tbl User Nombre'), 'tbl_user_apellidomaterno' => Yii::t('app', 'Tbl User Apellidomaterno'), 'tbl_user_apellidopaterno' => Yii::t('app', 'Tbl User Apellidopaterno'),'tbl_user_email'=>Yii::t('app','Email'), 'tbl_user_password' => Yii::t('app', 'Tbl User Password'), 'tbl_user_siglas' => Yii::t('app', 'Tbl User Siglas'), 'tbl_categoriauser_id_categoriauser' => Yii::t('app', 'Tbl Categoriauser Id Categoriauser')];
 	}
 
 	/**

@@ -18,7 +18,17 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
-        	
+        	'access'=>[
+         	'class'=>AccessControl::className(),
+         	'only'=>['index','create','view','update'],
+         	'rules'=>[
+         			['actions'=>['index','view','create','update'],
+         				'allow'=>true,
+         				'roles'=>['@'],
+         				'matchCallback'=>function($rule,$action){ if(Yii::$app->User->identity->tblCategoriauserIdCategoriauser->tbl_categoriauser_nombre=="Administrador" or Yii::$app->User->identity->tblCategoriauserIdCategoriauser->tbl_categoriauser_nombre=="Almacenista" ) return true; else return false;},
+         			]
+         		]
+         	],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -122,8 +132,15 @@ class UserController extends Controller
 				$model2->save();
 			}
 				if($model->save()){
-					$impresora=new Impresora();
-					$impresora->impresionuser(['mecanico'=>$model->tbl_user_nombre,'Jefe'=>'','id'=>$model->id_user]);		
+					$updatecorreo=\app\models\Parametro::find()->where(['CVE_PARAMETRO'=>'CorreoAdministrador'])->one();
+					Yii::$app->mailer->compose()
+					->setFrom('uersistema@gmail.com')
+    				->setTo($updatecorreo->valor)
+    				->setSubject('Cambio usuario')
+    				->setHtmlBody('<h1>Cambio de datos del usuario </h1><br><p>Nombre de usuario:</p>'.$model->tbl_user_nombre.' '.$model->tbl_user_apellidomaterno.' '.$model->tbl_user_apellidopaterno)
+    				->send();
+					//$impresora=new Impresora();
+					//$impresora->impresionuser(['mecanico'=>$model->tbl_user_nombre,'Jefe'=>'','id'=>$model->id_user]);		
 				 return $this->redirect(['index']);
 				}
         } else {

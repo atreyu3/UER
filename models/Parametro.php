@@ -4,17 +4,13 @@ namespace app\models;
 
 use Yii;
 
-/* humberto codegenerator*/
-use yii\helpers\ArrayHelper;
-/* humberto codegenerator*/
-
 /**
  * This is the model class for table "parametro".
  *
-		 * @property string $CVE_PARAMETRO
- 			 * @property string $VALOR
- 			 * @property string $DESCRIPCION
- 	 */
+ * @property string $CVE_PARAMETRO
+ * @property string $VALOR
+ * @property string $DESCRIPCION
+ */
 class Parametro extends \yii\db\ActiveRecord
 {
     /**
@@ -31,6 +27,7 @@ class Parametro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['CVE_PARAMETRO'], 'required'],
             [['CVE_PARAMETRO'], 'string', 'max' => 30],
             [['VALOR', 'DESCRIPCION'], 'string', 'max' => 256]
         ];
@@ -42,10 +39,9 @@ class Parametro extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'CVE_PARAMETRO' => Yii::t('app', 'Cve  Parametro'),
-            'VALOR' => Yii::t('app', 'Valor'),
-            'DESCRIPCION' => Yii::t('app', 'Descripcion'),
+            'CVE_PARAMETRO' => 'Cve  Parametro',
+            'VALOR' => 'Valor',
+            'DESCRIPCION' => 'Descripcion',
         ];
     }
-	
 }
