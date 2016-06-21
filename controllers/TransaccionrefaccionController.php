@@ -35,7 +35,18 @@ class TransaccionrefaccionController extends Controller {
 		$model = new Transaccionrefaccion();
 		return $this -> render('index', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider, 'model' => $model, ]);
 	}
-
+	
+	/**
+	 * Lista todos los registros sin linea ni maquina .
+	 * @return mixed
+	 */
+	public function actionSinregistrar() {
+		$this -> confirmacionsalidas();
+		$searchModel = new TransaccionrefaccionSearch();
+		$dataProvider = $searchModel -> search(Yii::$app -> request -> queryParams);
+		$model = new Transaccionrefaccion();
+		return $this -> render('sinregistrar', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider, 'model' => $model, ]);
+	}
 	private function confirmacionsalidas() {
 		$salidas = \app\models\Transaccionrefaccion::find() -> where(['mod_transaccionrefaccion_confirmado' => 0]) -> all();
 		foreach ($salidas as $key => $salida) {

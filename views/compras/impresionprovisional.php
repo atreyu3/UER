@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <p>
         <?= ButtonGroup::widget([
         'buttons'=>[
-        Html::a(Yii::t('app', 'Create Directo'), ['create'], ['class' => 'btn btn-raised btn-success opcion','data-toggle'=>'modal','data-target'=>'#impresion-modal']), 
+        Html::a(Yii::t('app', 'Create Directo'), ['create'], ['class' => 'btn btn-raised btn-success opcion','data-toggle'=>'modal','data-target'=>'#compras-modal']), 
         ]
         ])
         ?>
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php print_r($port) ?>
 	 <?php endif?>
 <?php	Modal::begin([
-			 'id'=>'impresion-modal',
+			 'id'=>'compras-modal',
 			 'size'=>'modal-lg'
 	]);
  ?>

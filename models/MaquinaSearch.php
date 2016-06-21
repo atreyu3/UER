@@ -51,7 +51,7 @@ class MaquinaSearch extends Maquina
     public function search($params)
     {
         $query = Maquina::find();
-        $query->where(['not like','tbl_status_id_status',4]);
+        $query->where(['tbl_maquina_activos'=>1]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
              'pagination' => [
@@ -98,7 +98,7 @@ class MaquinaSearch extends Maquina
     public function searchIniactivos($params)
     {
         $query = Maquina::find();
-        $query->where(['tbl_status_id_status'=>4]);
+        $query->where(['tbl_maquina_activos'=>0]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
              'pagination' => [

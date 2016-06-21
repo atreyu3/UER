@@ -52,6 +52,7 @@ $menuItems2 = [
          'template'=>'<a href="{url}" >{label}</a>',
 		 'items' => [
 		 	  ['label' => 'Salidas', 'url' => ['/transaccionrefaccion/']],
+		 	  ['label' => 'Salidas sin registrar', 'url' => ['/transaccionrefaccion/sinregistrar']],
 		 	  ['label' => 'Devoluciones', 'url' => ['/devoluciones/']],	
 		 	  ['label' => 'Maquina costos', 'url' => ['/transaccionrefaccion/reporte']],
 		 ]        
