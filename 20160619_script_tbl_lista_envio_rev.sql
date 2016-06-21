@@ -1,0 +1,1 @@
+drop table tbl_lista_envio;

@@ -1,0 +1,1 @@
+create table tbl_lista_envio(e_mail varchar(300) not null, desc_puesto varchar(300) not null );
