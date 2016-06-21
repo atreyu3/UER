@@ -87,7 +87,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-target'=>'#linea-modal',
                                         'data-toggle'=>'modal'
 				]);
-		  	}
+		  	},
+		  'delete'=>function($url,$model){
+		  	return $model->tblMaquinas==null ? Html::a('<span class="glyphicon glyphicon-trash "></span>', $url, [
+                                        'title' => Yii::t('app', 'Delete Item'),
+				]): "".Yii::t('app', 'Accion no permitida')."";
+		  }
 		  ]		
 		],
 	]; 
