@@ -139,8 +139,8 @@ class UserController extends Controller
     				->setSubject('Cambio usuario')
     				->setHtmlBody('<h1>Cambio de datos del usuario </h1><br><p>Nombre de usuario:</p>'.$model->tbl_user_nombre.' '.$model->tbl_user_apellidomaterno.' '.$model->tbl_user_apellidopaterno)
     				->send();
-					//$impresora=new Impresora();
-					//$impresora->impresionuser(['mecanico'=>$model->tbl_user_nombre,'Jefe'=>'','id'=>$model->id_user]);		
+					$impresora=new Impresora();
+					$impresora->impresionuser(['mecanico'=>$model->tbl_user_nombre,'Jefe'=>'','id'=>$model->id_user]);		
 				 return $this->redirect(['index']);
 				}
         } else {
