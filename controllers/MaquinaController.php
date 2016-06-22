@@ -125,6 +125,20 @@ class MaquinaController extends Controller
         }
         }
     }
+	
+	/*
+	*UPdate para cambiar el estatus de las maquina de incativas a activas
+	*
+	*/
+	public function actionUpdateStatus($id)
+    {
+        $model = $this->findModel($id);
+		if (Yii::$app->request->isAjax) {
+			if ($model->load(Yii::$app->request->post()) && $model->updateInactivo()) {
+				return $this->redirect(['inactivo', 'tbl_status_id_status = 1' ,'id' => $model->id_maquina]);
+			} 
+		}
+    }
 
     /**
      * Deletes an existing Maquina model.
