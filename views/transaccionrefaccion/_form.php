@@ -11,7 +11,6 @@ use yii\widgets\ActiveForm;
 <div class="transaccionrefaccion-form">
 
     <?php $form = ActiveForm::begin([
-   	'action'=>'create',
    	'id'=>$model->formName(),
     ]); ?>
 

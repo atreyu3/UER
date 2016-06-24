@@ -119,6 +119,19 @@ $this->params['breadcrumbs'][] = $this->title;
 					'filterInputOptions'=>['placeholder' => 'Selecciona '], 
 					'group'=>true 
 				],
+				['class' => 'yii\grid\ActionColumn',
+		'template'=>'{update}',
+		'buttons'=>[
+		  'update'=>function ($url, $model) {
+		  	return Html::a('<span class="glyphicon glyphicon-edit "></span>', $url, [
+                                        'title' => Yii::t('app', 'Update Item'),
+                                        'class'=>'opcion',
+                                        'data-target'=>'#transaccionrefaccion-modal',
+                                        'data-toggle'=>'modal'
+				]);
+		  	}
+		  ]		
+		],
 	
 	]; 
 	$exportvar=ExportMenu::widget([

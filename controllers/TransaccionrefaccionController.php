@@ -37,6 +37,17 @@ class TransaccionrefaccionController extends Controller {
 	}
 	
 	/**
+	 * Lists all Transaccionrefaccion models .
+	 * @return mixed
+	 */
+	public function actionNoasignado() {
+		$this -> confirmacionsalidas();
+		$searchModel = new TransaccionrefaccionSearch();
+		$dataProvider = $searchModel -> searchnoasignado(Yii::$app -> request -> queryParams);
+		$model = new Transaccionrefaccion();
+		return $this -> render('noasignado', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider, 'model' => $model, ]);
+	}
+	/**
 	 * Lista todos los registros sin linea ni maquina .
 	 * @return mixed
 	 */
