@@ -17,8 +17,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'mod_transaccionrefaccion_date')->textInput() ?>
 
     <?= $form->field($model, 'mod_transaccionrefaccion_piezas')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'tbl_maquina_id_maquina')->dropDownList($model->tblmaquinaList, ['prompt' => ''])  ?>
+	
+	<label class="control-label" for="Linea"> Linea </label>
+	<?=  Html::dropDownList('Linea', null, $model->tblLineaList ,['prompt' => '','class'=>'form-control',
+				'onchange'=> '$.post( "'.Yii::$app->urlManager->createUrl('transaccionrefaccion/linea2?id=').'"+$(this).val(), function( data ) {
+                  $( "select#maquina" ).html( data );
+                })']) ?>
+	
+    <?= $form->field($model, 'tbl_maquina_id_maquina')->dropDownList($model->tblmaquinaList, ['prompt' => '','id'=>'maquina'])  ?>
 
     <?= $form->field($model, 'tbl_usorefaccion_id_usorefaccion')->dropDownList($model->tblusorefaccionList2, ['prompt' => ''])  ?>
 

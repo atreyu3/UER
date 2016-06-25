@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <p>
         <?= ButtonGroup::widget([
         'buttons'=>[
-        Html::a(Yii::t('app', 'Create Directo'), ['create'], ['class' => 'btn btn-raised btn-success opcion','data-toggle'=>'modal','data-target'=>'#compras-modal']), 
+        Html::a(Yii::t('app', 'Create Directo'), ['transaccionrefaccion/createdirecto'], ['class' => 'btn btn-raised btn-success opcion','data-toggle'=>'modal','data-target'=>'#compras-modal']), 
         ]
         ])
         ?>
@@ -63,7 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	 <?php endif?>
 <?php	Modal::begin([
 			 'id'=>'compras-modal',
-			 'size'=>'modal-lg'
+			 'size'=>'modal-lg',
+			 'options'=>['tabindex' => false] 
 	]);
  ?>
  <div id="compras-modal-form"></div>

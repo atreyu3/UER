@@ -330,7 +330,47 @@ class TransaccionrefaccionController extends Controller {
 			}
 		}
 	}
-
+	
+	/**
+	 * Creates a new Transaccionrefaccion model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionCreatedirecto() {
+		$model = new Transaccionrefaccion();
+		if (Yii::$app -> request -> isAjax) {
+			if ($model -> load(Yii::$app -> request -> post())) {
+				$item=new \app\models\Item();
+				$item->tbl_item_bim='DI-'.$model->tbl_item_id_item;
+				$item->tbl_familia_id_familia=1;
+				$item->tbl_categoriaitem_id_categoriaitem=2;
+				$item->tbl_marca_id_marca=1;
+				if($item->save()){
+				$folio=\app\models\Parametro::find()->where(['CVE_PARAMETRO'=>'FOLIO_ITEM_DIRECTO'])->one();
+				$i=$folio->VALOR;
+				$i=$i+1;
+				$folio->VALOR="".$i."";
+				$folio->save();	
+				$model->tbl_item_id_item=$item->id_item;
+				$model->tbl_user_id_user=238;			
+				if($model -> save()){
+					return $this -> redirect(['compras/impresionprovisional']);
+				}
+				}
+				
+			} else {
+				$folio=\app\models\Parametro::find()->where(['CVE_PARAMETRO'=>'FOLIO_ITEM_DIRECTO'])->one();
+				$model->tbl_item_id_item=$folio->VALOR;
+				return $this -> renderAjax('createdirecto', ['model' => $model, ]);
+			}
+		} else {
+			if ($model -> load(Yii::$app -> request -> post()) && $model -> save()) {
+				return $this -> redirect(['view', 'id' => $model -> id_transaccionrefaccion]);
+			} else {
+				return $this -> render('createdirecto', ['model' => $model, ]);
+			}
+		}
+	}
 	/**
 	 * Updates an existing Transaccionrefaccion model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
