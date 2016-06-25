@@ -339,6 +339,15 @@ class ArchivoController extends Controller
 		$this->downloadFile(Yii::$app->basePath."/web/",$salida);
 		return $this->redirect(['index']);
 	}
+	
+	public function actionSalidastiempo(){
+		$model=new Archivo();
+		$salida=$model->salidastiempo();
+		
+		$this->downloadFile(Yii::$app->basePath."/web/",$salida);
+		return $this->redirect(['index']);
+	}
+	
 	public function actionDevoluciones(){
 		$model=new Archivo();
 		$salida=$model->devolucion();

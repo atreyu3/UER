@@ -795,6 +795,40 @@ public function proccessfilter($lineas=null,$filter) {
         $objWriter->save($salida);
         return $salida;
 	}
+
+	public function salidastiempo(){
+	$salida="itemsnoasignados.xls";
+	$autoid=1;
+	$objReader = \PHPExcel_IOFactory::createReader('Excel5');
+    $objPHPExcel = $objReader->load("templates/itemsnoasignados.xls");
+        $i = 2;
+        $j=1;
+        $k=7;    	
+	$items=Transaccionrefaccion::find()->select(['id_transaccionrefaccion','mod_transaccionrefaccion_louder','tbl_item_id_item','mod_transaccionrefaccion_tagid','mod_transaccionrefaccion_date','tbl_maquina_id_maquina','tbl_user_id_user','tbl_usorefaccion_id_usorefaccion','Sum(mod_transaccionrefaccion_piezas) as sumacount'])
+	->where(['BETWEEN','mod_transaccionrefaccion_date',new Expression('DATE_SUB(NOW(), INTERVAL 24 HOUR)'),new Expression('NOW()')])->andWhere(['tbl_maquina_id_maquina'=>0,'tbl_usorefaccion_id_usorefaccion'=>0])->groupBy(['mod_transaccionrefaccion_date','tbl_item_id_item'])->all();	    	
+	$item=new Transaccionrefaccion();
+	//$query=Transaccionrefaccion::find()->select(['id_transaccionrefaccion','mod_transaccionrefaccion_louder','tbl_item_id_item','mod_transaccionrefaccion_tagid','mod_transaccionrefaccion_date','tbl_maquina_id_maquina','tbl_user_id_user','tbl_usorefaccion_id_usorefaccion','Sum(mod_transaccionrefaccion_piezas) as sumacount'])
+	//->where(['BETWEEN','mod_transaccionrefaccion_date',new Expression('DATE_SUB(NOW(), INTERVAL 24 HOUR)'),new Expression('NOW()')],['tbl_maquina_id_maquina'=>0,'tbl_usorefaccion_id_usorefaccion'=>0])->groupBy(['mod_transaccionrefaccion_date','tbl_item_id_item']);
+	//$sql=$query->createCommand()->getRawSql();
+	foreach($items as $item){
+	           $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $item->tblItemIdItem->tbl_item_bim)
+        		    ->setCellValue('B'.$i,  strtoupper($item->tblMaquinaIdMaquina->tblLineaIdLinea->tbl_linea_siglas))//item
+                    ->setCellValue('C'.$i,  $item->tblMaquinaIdMaquina->tbl_maquina_descripcion)//cantidad
+        		    ->setCellValue('D'.$i,  $item->mod_transaccionrefaccion_date)//descripcion
+        		    ->setCellValue('E'.$i,  $item->sumacount)//maquina
+                    ->setCellValue('F'.$i,  $item->tblUsorefaccionIdUsorefaccion->tbl_usorefaccion_nombre)//empaque
+                    ->setCellValue('G'.$i,  $item->tblUserIdUser->tbl_user_nombre);
+					//->setCellValue('H'.$i,  $sql);
+            		$i++;
+        }
+		// Export to Excel2007 (.xlsx)
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        //$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+        $objWriter->save($salida);
+        return $salida;
+	}
+
 	public function devolucion(){
 		$salida="Devoluciones.xlsx";
         	
