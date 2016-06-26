@@ -348,6 +348,19 @@ class ArchivoController extends Controller
 		return $this->redirect(['index']);
 	}
 	
+	public function actionSalidastiempocorreo(){
+		$model=new Archivo();
+		$salida=$model->salidastiempo();
+		$updatecorreo=\app\models\Parametro::find()->where(['CVE_PARAMETRO'=>'CorreoAdministrador'])->one();
+					Yii::$app->mailer->compose()
+					->setFrom('uersistema@gmail.com')
+    				->setTo($updatecorreo->VALOR)
+    				->setSubject('Items no asignados')
+    				->setHtmlBody('<h1>Correo items sin asignar </h1><br><p>Se adjunta el siguiente archivo:</p>')
+    				->attach(Yii::$app->basePath."/web/".$salida)
+    				->send();
+		return $this->redirect(['transaccionrefaccion/index']);
+	}
 	public function actionDevoluciones(){
 		$model=new Archivo();
 		$salida=$model->devolucion();

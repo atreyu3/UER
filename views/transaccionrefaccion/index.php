@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'buttons'=>[
         Html::a(Yii::t('app', 'Create Transaccionrefaccion'), ['create'], ['class' => 'btn btn-raised btn-success opcion','data-toggle'=>'modal','data-target'=>'#transaccionrefaccion-modal']), 
         Html::a('<span class="caret"></span><div class="ripple-container"></div>',['#'], ['class' => 'btn btn-raised btn-success dropdown-toggle','data-target'=>"#",'data-toggle'=>'dropdown']),
-        Menu::widget(['items'=>[['label'=>'louder salidas','url'=>['archivo/salidas']],['label'=>'Salidas sin registrar','url'=>['archivo/salidastiempo']],['label'=>'louder devoluciones','url'=>['archivo/devoluciones']]],'options'=>['class'=>'dropdown-menu']]),
+        Menu::widget(['items'=>[['label'=>'louder salidas','url'=>['archivo/salidas']],['label'=>'Salidas sin registrar','url'=>['archivo/salidastiempo']],['label'=>'Salidas correo','url'=>['archivo/salidastiempocorreo']],['label'=>'louder devoluciones','url'=>['archivo/devoluciones']]],'options'=>['class'=>'dropdown-menu']]),
         ]
         ])
         ?>
