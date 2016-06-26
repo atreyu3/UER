@@ -100,11 +100,36 @@ class TransaccionrefaccionController extends Controller {
 	 * @return mixed
 	 */
 	public function actionTransaccionv() {
-		$userip = Yii::$app -> request -> userIP;
+		$userip = Yii::$app -> request -> userIP;		
 		if ($userip == "127.0.0.1") {
 			Yii::$app -> user -> logout();
+			$usr_selected =Yii::$app->request->get('id_readusuario');//si se selecciono un usuario de la lista de usuarios llegara aqui
+			if (isset($_SESSION['usr_auto_login'])){//reseteamos la variable de session del usuario
+				unset($_SESSION['usr_auto_login']);
+			}
 			$model = new Transaccionrefaccion();
-			$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
+			/* ESTA PARTE APLICA PARA BUSCAR CUANTOS USUARIOS TIENEN LOS PARAMETROS DE LOGUEO, activoweb= 1 y activo=1  */
+			//$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one(); //Vamso abuscar todos los posibles usuarios
+			
+			//validamos la cantidad de usuarios que potencialmente se pueden loguear	
+			if($usr_selected==null){//Si ya se eligio un usuario no tiene caso entrar
+				$listreadusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> all();
+				if(!empty($listreadusuario)){
+					if(count($listreadusuario)==1){//validamos el caso previamente programado,donde solo controla un logueo
+						$readusuario = $listreadusuario[0];
+					}else{
+						//TODO manejo de multiples usuarios que puedan loguearse
+						return $this -> render('usuariono', ['usuarios' => $this->obtieneUsuarios($listreadusuario)]);
+					}
+				}
+			}else{/* SI EL USUARIO YA SE ELIGIO DELA LISTA ENTRARA AQUI */
+				$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1,'id_readusuario'=>$usr_selected]) -> one();
+			}
+			
+			
+			
+			
+			
 			if (isset($readusuario -> id_readusuario)) {
 				$reads = \app\models\Read::find() -> where(['tbl_readusuario_id_readusuario' => $readusuario -> id_readusuario, 'tbl_read_antena' => 1, 'tbl_read_activo' => 1]) -> all();
 				foreach ($reads as $read) {
@@ -139,7 +164,7 @@ class TransaccionrefaccionController extends Controller {
 				}
 				$model = new Transaccionrefaccion();
 				$item = new Item();
-			}else{
+			}else{//TODO validar inactivacion no solo de un usuario sino de todos
 				$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 0]) -> one();
 				if (isset($readusuario -> id_readusuario)) {
 					$readusuario->tbl_readusuario_activo=0;
@@ -152,25 +177,67 @@ class TransaccionrefaccionController extends Controller {
 				$user = new \app\models\LoginForm();
 				if ($usuario) {
 					$user -> login2($usuario);
+					//subimos al usuario a session					
+					$_SESSION['usr_auto_login'] =  array("id_user"=>$nombre, 'id_readusuario'=>$readusuario -> id_readusuario);//subimos id_usuario para la tbl_user
+				
+					
 				}
 			}
 			if (isset($aux) and isset($usuario)) {
 				return $this -> render('transaccionv', ['model' => $model, 'rfid' => $aux, 'item' => $item, 'usuarioaux' => 1]);
 			} else {
-				return $this -> render('usuariono', ['usuarioaux' => "cambiarusuario"]);
+				$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1,'id_readusuario'=>$readusuario -> id_readusuario]) -> one();
+				$readusuario -> tbl_readusuario_activoweb = 0;
+				$readusuario -> save();
+				$listreadusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> all();
+				if(!empty($listreadusuario)){
+					if(count($listreadusuario)==1){//validamos el caso previamente programado,donde solo controla un logueo
+						return $this -> render('usuariono', ['usuarioaux' => "cambiarusuario"]);
+					}else{
+						//TODO manejo de multiples usuarios que puedan loguearse
+						return $this -> render('usuariono', ['usuarios' => $this->obtieneUsuarios($listreadusuario)]);
+					}
+				}
+				
+				
+				
 			}
 		}
+	}
+	
+	private function obtieneUsuarios($listreadusuario){
+		
+		$usuarios = array();
+		foreach ($listreadusuario as $usr) {
+			$user = User::find() -> where(['id_user' => $this->obtenIdFromTag($usr->tbl_readusuario_tagid)]) -> one();//si el tag id no tiene un id en la tabla users esto no retornara datos y no mostrara info
+		    if($user)
+			$usuarios[$usr->id_readusuario]=array("id_user"=>$user->id_user, 'id_readusuario'=>$usr->id_readusuario,'nombre'=>$user->tbl_user_nombre,'apellido'=>$user->tbl_user_apellidopaterno);
+			else
+				throw new NotFoundHttpException('No se encontro el id de usuario '.$this->obtenIdFromTag($usr->tbl_readusuario_tagid). ' para el TagId: '.$usr->tbl_readusuario_tagid);
+		}	
+		return $usuarios;		
+	}
+	
+	private function obtenIdFromTag($tagid){
+		$r = substr($tagid, 0, 1);
+		$nombre=0;
+		if ($r == 'E') {
+			$i = explode("F", $tagid);
+			$nombre = str_replace('E', '', $i[0]);
+		}
+		return $nombre;			
 	}
 
 	public function actionRecargarusuario() {
 		$devolucion=new \app\models\Devoluciones();
-		$devolucion->devoluciones();
-		$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
+		$devolucion->devoluciones(); //TODO revisar con gerardo devoluciones, este metodo solo devuelve todo lo que cumpla con antena y estatus
+		return $this -> redirect(['transaccionv']);
+		/*$$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
 		if (isset($readusuario -> id_readusuario)) {
 			return $this -> redirect(['transaccionv']);
 		} else {
 			return $this -> redirect(['transaccionv']);
-		}
+		}*/
 	}
 
 	
@@ -189,18 +256,27 @@ class TransaccionrefaccionController extends Controller {
 	}
 
 	public function actionCambiarusuario() {
-		$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
+		$request = Yii::$app->request->get('id_readusuario');
+		
+		if($request!=null)
+		    return $this -> redirect(['transaccionv', 'id_readusuario'=>$request]);
+		else 
+			return $this -> redirect(['transaccionv']);
+		/*$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
 		$readusuario -> tbl_readusuario_activoweb = 0;
-		$readusuario -> save();
+		$readusuario -> save();*/
+		
+		
 	}
 
 	public function actionRecargar() {
 		$devolucion=new \app\models\Devoluciones();
-		$devolucion->devoluciones();
+		$devolucion->devoluciones();//TODO revisar con gerardo este flujo		
 		$userip =Yii::$app -> request -> userIP;
 		if ($userip == "127.0.0.1") {
-			$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1]) -> one();
-			if (!isset($readusuario -> id_readusuario)) {
+			session_start();
+			$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1,'id_readusuario'=>isset($_SESSION['usr_auto_login']['id_readusuario']) ? $_SESSION['usr_auto_login']['id_readusuario'] : 0]) -> one();
+			if (!isset($readusuario -> id_readusuario)) {//Esta parte trata de asignar items a un usuario que no se logueo, revisar con Gerardo para que se realice con Java y un reporte
 				$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1]) -> one();
 				$reads = \app\models\Read::find() -> where(['tbl_readusuario_id_readusuario' => $readusuario -> id_readusuario, 'tbl_read_antena' => 1, 'tbl_read_activo' => 1]) -> all();
 				$r = substr($readusuario -> tbl_readusuario_tagid, 0, 1);
@@ -444,7 +520,10 @@ class TransaccionrefaccionController extends Controller {
 	}
 
 	public function actionGuardarrefacciones() {
-		$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1]) -> one();
+		//$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1]) -> one();
+		//Guardamos por el usuario de la session
+		session_start();
+		$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1,'id_readusuario'=>isset($_SESSION['usr_auto_login']['id_readusuario']) ? $_SESSION['usr_auto_login']['id_readusuario'] : 0]) -> one();
 		$reads = \app\models\Read::find() -> where(['tbl_read_antena' => 1, 'tbl_readusuario_id_readusuario' => $readusuario -> id_readusuario, 'tbl_read_activo' => 1]) -> all();
 		if (isset($readusuario -> id_readusuario)) {
 			$i = explode("F", $readusuario -> tbl_readusuario_tagid);
@@ -501,7 +580,9 @@ class TransaccionrefaccionController extends Controller {
 	public function actionParcial($id) {
 		if (Yii::$app -> request -> get()) {
 			$tag = new \app\models\Read();
-			$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1]) -> one();
+			//$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1]) -> one();
+			session_start();
+			$readusuario = \app\models\Readusuario::find() -> where(['tbl_readusuario_activo' => 1, 'tbl_readusuario_activoweb' => 1,'id_readusuario'=>isset($_SESSION['usr_auto_login']['id_readusuario']) ? $_SESSION['usr_auto_login']['id_readusuario'] : 0]) -> one();
 			$tag -> tbl_read_tagid = $id . "E1411213123";
 			$tag -> tbl_readusuario_id_readusuario = $readusuario -> id_readusuario;
 			$tag -> save();
