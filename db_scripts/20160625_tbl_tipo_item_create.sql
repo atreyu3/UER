@@ -1,0 +1,1 @@
+create table tbl_tipo_item (tbl_cve_tipo varchar(20) primary key not null, tbl_descripcion varchar(150));

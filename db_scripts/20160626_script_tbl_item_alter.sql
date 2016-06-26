@@ -1,0 +1,1 @@
+alter table tbl_item add tbl_cve_tipo varchar(20) not null;
