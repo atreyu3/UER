@@ -15,6 +15,11 @@ use kartik\grid\GridView;
 $this->title = Yii::t('app', 'Transaccionrefaccions');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+td{text-align:right;}
+td.kv-grid-group{text-align:center;}
+tr.kv-group-footer td{text-align:left;}
+</style>
 <div class="transaccionrefaccion-index col-lg-12 col-md-12 col-xs-12 well">
 
     <h1><?= Html::encode($this->title) ?></h1>
